@@ -2,39 +2,39 @@
 
 int main(int argc, char* argv[])
 {
-    //ÐèÒªÐÞ¸ÄµÄÊý¾Ý¿âÐÅÏ¢,µÇÂ¼Ãû,ÃÜÂë,¿âÃû
-    string user = "root";
-    string passwd = "root";
-    string databasename = "qgydb";
+    //ï¿½ï¿½Òªï¿½Þ¸Äµï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½Ï¢,ï¿½ï¿½Â¼ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½
+    string user = "debian-sys-maint";
+    string passwd = "kR5lndBEFwvniUKT";
+    string databasename = "yourdb";
 
-    //ÃüÁîÐÐ½âÎö
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½
     Config config;
     config.parse_arg(argc, argv);
 
     WebServer server;
 
-    //³õÊ¼»¯
+    //ï¿½ï¿½Ê¼ï¿½ï¿½
     server.init(config.PORT, user, passwd, databasename, config.LOGWrite,
         config.OPT_LINGER, config.TRIGMode, config.sql_num, config.thread_num,
         config.close_log, config.actor_model);
 
 
-    //ÈÕÖ¾
+    //ï¿½ï¿½Ö¾
     server.log_write();
 
-    //Êý¾Ý¿â
+    //ï¿½ï¿½ï¿½Ý¿ï¿½
     server.sql_pool();
 
-    //Ïß³Ì³Ø
+    //ï¿½ß³Ì³ï¿½
     server.thread_pool();
 
-    //´¥·¢Ä£Ê½
+    //ï¿½ï¿½ï¿½ï¿½Ä£Ê½
     server.trig_mode();
 
-    //¼àÌý
+    //ï¿½ï¿½ï¿½ï¿½
     server.eventListen();
 
-    //ÔËÐÐ
+    //ï¿½ï¿½ï¿½ï¿½
     server.eventLoop();
 
     return 0;
