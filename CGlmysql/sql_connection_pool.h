@@ -17,43 +17,45 @@ using namespace std;
 class connection_pool
 {
 public:
-	MYSQL* GetConnection();					//»ñÈ¡Êı¾İ¿âÁ¬½Ó
-	bool ReleaseConnection(MYSQL* conn);	//ÊÍ·ÅÁ¬½Ó
-	int GetFreeConn();						//»ñÈ¡Á¬½Ó
-	void DestroyPool();						//Ïú»ÙËùÓĞÁ¬½Ó
+	MYSQL *GetConnection();				 //è·å–æ•°æ®åº“è¿æ¥
+	bool ReleaseConnection(MYSQL *conn); //é‡Šæ”¾è¿æ¥
+	int GetFreeConn();					 //è·å–è¿æ¥
+	void DestroyPool();					 //é”€æ¯æ‰€æœ‰è¿æ¥
 
-	//µ¥ÀıÄ£Ê½
-	static connection_pool* GetInstance();
+	//å•ä¾‹æ¨¡å¼
+	static connection_pool *GetInstance();
 
-	void init(string url, string User, string PassWord, string DataBaseName, int Port, int MaxConn, int close_log);
+	void init(string url, string User, string PassWord, string DataBaseName, int Port, int MaxConn, int close_log); 
 
 private:
 	connection_pool();
 	~connection_pool();
 
-	int m_MaxConn;		//×î´óÁ¬½ÓÊı
-	int m_CurConn;		//µ±Ç°ÒÑÊ¹ÓÃµÄÁ¬½ÓÊı
-	int m_FreeConn;		//µ±Ç°¿ÕÏĞµÄÁ¬½ÓÊı
+	int m_MaxConn;  //æœ€å¤§è¿æ¥æ•°
+	int m_CurConn;  //å½“å‰å·²ä½¿ç”¨çš„è¿æ¥æ•°
+	int m_FreeConn; //å½“å‰ç©ºé—²çš„è¿æ¥æ•°
 	locker lock;
-	list<MYSQL*> connList;	//Á¬½Ó³Ø
+	list<MYSQL *> connList; //è¿æ¥æ± 
 	sem reserve;
 
 public:
-	string m_url;			//Ö÷»úµØÖ·
-	string m_Port;			//Êı¾İ¿â¶Ë¿ÚºÅ
-	string m_User;			//µÇÂ¼Êı¾İ¿âÓÃ»§Ãû
-	string m_PassWord;		//µÇÂ¼Êı¾İ¿âÃÜÂë
-	string m_DatabaseName;	//Ê¹ÓÃÊı¾İ¿âÃû
-	int m_close_log;		//ÈÕÖ¾¿ª¹Ø
+	string m_url;			 //ä¸»æœºåœ°å€
+	string m_Port;		 //æ•°æ®åº“ç«¯å£å·
+	string m_User;		 //ç™»é™†æ•°æ®åº“ç”¨æˆ·å
+	string m_PassWord;	 //ç™»é™†æ•°æ®åº“å¯†ç 
+	string m_DatabaseName; //ä½¿ç”¨æ•°æ®åº“å
+	int m_close_log;	//æ—¥å¿—å¼€å…³
 };
 
-class connectionRAII {
+class connectionRAII{
+
 public:
-	connectionRAII(MYSQL** con, connection_pool* connPooll);
+	connectionRAII(MYSQL **con, connection_pool *connPool);
 	~connectionRAII();
-
+	
 private:
-	MYSQL* conRAIIl;
-	connection_pool* poolRAII;
+	MYSQL *conRAII;
+	connection_pool *poolRAII;
 };
+
 #endif // !WEBSERVER_SQL_CONNECTION_POOL_H

@@ -30,7 +30,7 @@ struct client_data
 {
     sockaddr_in address;
     int sockfd;
-    util_timer* timer;
+    util_timer *timer;
 };
 
 class util_timer
@@ -40,11 +40,11 @@ public:
 
 public:
     time_t expire;
-
-    void (*cb_func)(client_data*);
-    client_data* user_data;
-    util_timer* prev;
-    util_timer* next;
+    
+    void (* cb_func)(client_data *);
+    client_data *user_data;
+    util_timer *prev;
+    util_timer *next;
 };
 
 class sort_timer_lst
@@ -53,16 +53,16 @@ public:
     sort_timer_lst();
     ~sort_timer_lst();
 
-    void add_timer(util_timer* timer);
-    void adjust_timer(util_timer* timer);
-    void del_timer(util_timer* timer);
+    void add_timer(util_timer *timer);
+    void adjust_timer(util_timer *timer);
+    void del_timer(util_timer *timer);
     void tick();
 
 private:
-    void add_timer(util_timer* timer, util_timer* lst_head);
+    void add_timer(util_timer *timer, util_timer *lst_head);
 
-    util_timer* head;
-    util_timer* tail;
+    util_timer *head;
+    util_timer *tail;
 };
 
 class Utils
@@ -73,31 +73,31 @@ public:
 
     void init(int timeslot);
 
-    //¶ÔÎÄ¼şÃèÊö·ûÉèÖÃ·Ç×èÈû
+    //å¯¹æ–‡ä»¶æè¿°ç¬¦è®¾ç½®éé˜»å¡
     int setnonblocking(int fd);
 
-    //½«ÄÚºËÊÂ¼ş±í×¢²á¶ÁÊÂ¼ş£¬ETÄ£Ê½£¬Ñ¡Ôñ¿ªÆôEPOLLONESHOT
+    //å°†å†…æ ¸äº‹ä»¶è¡¨æ³¨å†Œè¯»äº‹ä»¶ï¼ŒETæ¨¡å¼ï¼Œé€‰æ‹©å¼€å¯EPOLLONESHOT
     void addfd(int epollfd, int fd, bool one_shot, int TRIGMode);
 
-    //ĞÅºÅ´¦Àíº¯Êı
+    //ä¿¡å·å¤„ç†å‡½æ•°
     static void sig_handler(int sig);
 
-    //ÉèÖÃĞÅºÅº¯Êı
+    //è®¾ç½®ä¿¡å·å‡½æ•°
     void addsig(int sig, void(handler)(int), bool restart = true);
 
-    //¶¨Ê±´¦ÀíÈÎÎñ£¬ÖØĞÂ¶¨Ê±ÒÔ²»¶Ï´¥·¢SIGALRMĞÅºÅ
+    //å®šæ—¶å¤„ç†ä»»åŠ¡ï¼Œé‡æ–°å®šæ—¶ä»¥ä¸æ–­è§¦å‘SIGALRMä¿¡å·
     void timer_handler();
 
-    void show_error(int connfd, const char* info);
+    void show_error(int connfd, const char *info);
 
 public:
-    static int* u_pipefd;
+    static int *u_pipefd;
     sort_timer_lst m_timer_lst;
     static int u_epollfd;
     int m_TIMESLOT;
 };
 
-void cb_func(client_data* user_data);
+void cb_func(client_data *user_data);
 
 
 #endif // !WEBSERVER_LST_TIMER_H

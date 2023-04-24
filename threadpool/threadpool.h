@@ -1,40 +1,40 @@
-#ifndef WEBSERVER_THREADPOOL_H
-#define WEBSERVER_THREADPOOL_H
+#ifndef THREADPOOL_H
+#define THREADPOOL_H
 
 #include <list>
 #include <cstdio>
 #include <exception>
 #include <pthread.h>
 #include "../lock/locker.h"
-#include "../CGlmysql/sql_connection_pool.h"
+#include "../CGImysql/sql_connection_pool.h"
 
 template <typename T>
 class threadpool
 {
 public:
-    /*thread_numberÊÇÏß³Ì³ØÖĞÏß³ÌµÄÊıÁ¿£¬max_requestsÊÇÇëÇó¶ÓÁĞÖĞ×î¶àÔÊĞíµÄ¡¢µÈ´ı´¦ÀíµÄÇëÇóµÄÊıÁ¿*/
-    threadpool(int actor_model, connection_pool* connPool, int thread_number = 8, int max_request = 10000);
+    /*thread_numberæ˜¯çº¿ç¨‹æ± ä¸­çº¿ç¨‹çš„æ•°é‡ï¼Œmax_requestsæ˜¯è¯·æ±‚é˜Ÿåˆ—ä¸­æœ€å¤šå…è®¸çš„ã€ç­‰å¾…å¤„ç†çš„è¯·æ±‚çš„æ•°é‡*/
+    threadpool(int actor_model, connection_pool *connPool, int thread_number = 8, int max_request = 10000);
     ~threadpool();
-    bool append(T* request, int state);
-    bool append_p(T* request);
+    bool append(T *request, int state);
+    bool append_p(T *request);
 
 private:
-    /*¹¤×÷Ïß³ÌÔËĞĞµÄº¯Êı£¬Ëü²»¶Ï´Ó¹¤×÷¶ÓÁĞÖĞÈ¡³öÈÎÎñ²¢Ö´ĞĞÖ®*/
-    static void* worker(void* arg);
+    /*å·¥ä½œçº¿ç¨‹è¿è¡Œçš„å‡½æ•°ï¼Œå®ƒä¸æ–­ä»å·¥ä½œé˜Ÿåˆ—ä¸­å–å‡ºä»»åŠ¡å¹¶æ‰§è¡Œä¹‹*/
+    static void *worker(void *arg);
     void run();
 
 private:
-    int m_thread_number;        //Ïß³Ì³ØÖĞµÄÏß³ÌÊı
-    int m_max_requests;         //ÇëÇó¶ÓÁĞÖĞÔÊĞíµÄ×î´óÇëÇóÊı
-    pthread_t* m_threads;       //ÃèÊöÏß³Ì³ØµÄÊı×é£¬Æä´óĞ¡Îªm_thread_number
-    std::list<T*> m_workqueue; //ÇëÇó¶ÓÁĞ
-    locker m_queuelocker;       //±£»¤ÇëÇó¶ÓÁĞµÄ»¥³âËø
-    sem m_queuestat;            //ÊÇ·ñÓĞÈÎÎñĞèÒª´¦Àí
-    connection_pool* m_connPool;  //Êı¾İ¿â
-    int m_actor_model;          //Ä£ĞÍÇĞ»»
+    int m_thread_number;        //çº¿ç¨‹æ± ä¸­çš„çº¿ç¨‹æ•°
+    int m_max_requests;         //è¯·æ±‚é˜Ÿåˆ—ä¸­å…è®¸çš„æœ€å¤§è¯·æ±‚æ•°
+    pthread_t *m_threads;       //æè¿°çº¿ç¨‹æ± çš„æ•°ç»„ï¼Œå…¶å¤§å°ä¸ºm_thread_number
+    std::list<T *> m_workqueue; //è¯·æ±‚é˜Ÿåˆ—
+    locker m_queuelocker;       //ä¿æŠ¤è¯·æ±‚é˜Ÿåˆ—çš„äº’æ–¥é”
+    sem m_queuestat;            //æ˜¯å¦æœ‰ä»»åŠ¡éœ€è¦å¤„ç†
+    connection_pool *m_connPool;  //æ•°æ®åº“
+    int m_actor_model;          //æ¨¡å‹åˆ‡æ¢
 };
 template <typename T>
-threadpool<T>::threadpool(int actor_model, connection_pool* connPool, int thread_number, int max_requests) : m_actor_model(actor_model), m_thread_number(thread_number), m_max_requests(max_requests), m_threads(NULL), m_connPool(connPool)
+threadpool<T>::threadpool( int actor_model, connection_pool *connPool, int thread_number, int max_requests) : m_actor_model(actor_model),m_thread_number(thread_number), m_max_requests(max_requests), m_threads(NULL),m_connPool(connPool)
 {
     if (thread_number <= 0 || max_requests <= 0)
         throw std::exception();
@@ -61,7 +61,7 @@ threadpool<T>::~threadpool()
     delete[] m_threads;
 }
 template <typename T>
-bool threadpool<T>::append(T* request, int state)
+bool threadpool<T>::append(T *request, int state)
 {
     m_queuelocker.lock();
     if (m_workqueue.size() >= m_max_requests)
@@ -76,7 +76,7 @@ bool threadpool<T>::append(T* request, int state)
     return true;
 }
 template <typename T>
-bool threadpool<T>::append_p(T* request)
+bool threadpool<T>::append_p(T *request)
 {
     m_queuelocker.lock();
     if (m_workqueue.size() >= m_max_requests)
@@ -90,9 +90,9 @@ bool threadpool<T>::append_p(T* request)
     return true;
 }
 template <typename T>
-void* threadpool<T>::worker(void* arg)
+void *threadpool<T>::worker(void *arg)
 {
-    threadpool* pool = (threadpool*)arg;
+    threadpool *pool = (threadpool *)arg;
     pool->run();
     return pool;
 }
@@ -108,7 +108,7 @@ void threadpool<T>::run()
             m_queuelocker.unlock();
             continue;
         }
-        T* request = m_workqueue.front();
+        T *request = m_workqueue.front();
         m_workqueue.pop_front();
         m_queuelocker.unlock();
         if (!request)
@@ -149,4 +149,4 @@ void threadpool<T>::run()
         }
     }
 }
-#endif // !WEBSERVER_THREADPOOL_H
+#endif

@@ -13,34 +13,34 @@ public:
 
     void parse_arg(int argc, char* argv[]);
 
-    //¶Ë¿ÚºÅ
+   //ç«¯å£å·
     int PORT;
 
-    //ÈÕÖ¾Ğ´Èë·½Ê½
+    //æ—¥å¿—å†™å…¥æ–¹å¼
     int LOGWrite;
 
-    //´¥·¢×éºÏÄ£Ê½
+    //è§¦å‘ç»„åˆæ¨¡å¼
     int TRIGMode;
 
-    //listenfd´¥·¢Ä£Ê½
+    //listenfdè§¦å‘æ¨¡å¼
     int LISTENTrigmode;
 
-    //connfd´¥·¢Ä£Ê½
+    //connfdè§¦å‘æ¨¡å¼
     int CONNTrigmode;
 
-    //ÓÅÑÅ¹Ø±ÕÁ´½Ó
+    //ä¼˜é›…å…³é—­é“¾æ¥
     int OPT_LINGER;
 
-    //Êı¾İ¿âÁ¬½Ó³ØÊıÁ¿
+    //æ•°æ®åº“è¿æ¥æ± æ•°é‡
     int sql_num;
 
-    //Ïß³Ì³ØÄÚµÄÏß³ÌÊıÁ¿
+    //çº¿ç¨‹æ± å†…çš„çº¿ç¨‹æ•°é‡
     int thread_num;
 
-    //ÊÇ·ñ¹Ø±ÕÈÕÖ¾
+    //æ˜¯å¦å…³é—­æ—¥å¿—
     int close_log;
 
-    //²¢·¢Ä£ĞÍÑ¡Ôñ
+    //å¹¶å‘æ¨¡å‹é€‰æ‹©
     int actor_model;
 };
 

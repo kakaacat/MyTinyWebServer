@@ -2,10 +2,10 @@
 
 WebServer::WebServer()
 {
-    //http_connÀà¶ÔÏó
+    //http_connç±»å¯¹è±¡
     users = new http_conn[MAX_FD];
 
-    //rootÎÄ¼ş¼ĞÂ·¾¶
+    //rootæ–‡ä»¶å¤¹è·¯å¾„
     char server_path[200];
     getcwd(server_path, 200);
     char root[6] = "/root";
@@ -13,7 +13,7 @@ WebServer::WebServer()
     strcpy(m_root, server_path);
     strcat(m_root, root);
 
-    //¶¨Ê±Æ÷
+    //å®šæ—¶å™¨
     users_timer = new client_data[MAX_FD];
 }
 
@@ -76,7 +76,7 @@ void WebServer::log_write()
 {
     if (0 == m_close_log)
     {
-        //³õÊ¼»¯ÈÕÖ¾
+        //åˆå§‹åŒ–æ—¥å¿—
         if (1 == m_log_write)
             Log::get_instance()->init("./ServerLog", m_close_log, 2000, 800000, 800);
         else
@@ -86,27 +86,27 @@ void WebServer::log_write()
 
 void WebServer::sql_pool()
 {
-    //³õÊ¼»¯Êı¾İ¿âÁ¬½Ó³Ø
+    //åˆå§‹åŒ–æ•°æ®åº“è¿æ¥æ± 
     m_connPool = connection_pool::GetInstance();
     m_connPool->init("localhost", m_user, m_passWord, m_databaseName, 3306, m_sql_num, m_close_log);
 
-    //³õÊ¼»¯Êı¾İ¿â¶ÁÈ¡±í
+    //åˆå§‹åŒ–æ•°æ®åº“è¯»å–è¡¨
     users->initmysql_result(m_connPool);
 }
 
 void WebServer::thread_pool()
 {
-    //Ïß³Ì³Ø
+    //çº¿ç¨‹æ± 
     m_pool = new threadpool<http_conn>(m_actormodel, m_connPool, m_thread_num);
 }
 
 void WebServer::eventListen()
 {
-    //ÍøÂç±à³Ì»ù´¡²½Öè
+    //ç½‘ç»œç¼–ç¨‹åŸºç¡€æ­¥éª¤
     m_listenfd = socket(PF_INET, SOCK_STREAM, 0);
     assert(m_listenfd >= 0);
 
-    //ÓÅÑÅ¹Ø±ÕÁ¬½Ó
+    //ä¼˜é›…å…³é—­è¿æ¥
     if (0 == m_OPT_LINGER)
     {
         struct linger tmp = { 0, 1 };
@@ -134,7 +134,7 @@ void WebServer::eventListen()
 
     utils.init(TIMESLOT);
 
-    //epoll´´½¨ÄÚºËÊÂ¼ş±í
+    //epollåˆ›å»ºå†…æ ¸äº‹ä»¶è¡¨
     epoll_event events[MAX_EVENT_NUMBER];
     m_epollfd = epoll_create(5);
     assert(m_epollfd != -1);
@@ -153,7 +153,7 @@ void WebServer::eventListen()
 
     alarm(TIMESLOT);
 
-    //¹¤¾ßÀà,ĞÅºÅºÍÃèÊö·û»ù´¡²Ù×÷
+    //å·¥å…·ç±»ï¼Œä¿¡å·å’Œæè¿°ç¬¦åŸºç¡€æ“ä½œ
     Utils::u_pipefd = m_pipefd;
     Utils::u_epollfd = m_epollfd;
 }
@@ -162,8 +162,8 @@ void WebServer::timer(int connfd, struct sockaddr_in client_address)
 {
     users[connfd].init(connfd, client_address, m_root, m_CONNTrigmode, m_close_log, m_user, m_passWord, m_databaseName);
 
-    //³õÊ¼»¯client_dataÊı¾İ
-    //´´½¨¶¨Ê±Æ÷£¬ÉèÖÃ»Øµ÷º¯ÊıºÍ³¬Ê±Ê±¼ä£¬°ó¶¨ÓÃ»§Êı¾İ£¬½«¶¨Ê±Æ÷Ìí¼Óµ½Á´±íÖĞ
+    //åˆå§‹åŒ–client_dataæ•°æ®
+    //åˆ›å»ºå®šæ—¶å™¨ï¼Œè®¾ç½®å›è°ƒå‡½æ•°å’Œè¶…æ—¶æ—¶é—´ï¼Œç»‘å®šç”¨æˆ·æ•°æ®ï¼Œå°†å®šæ—¶å™¨æ·»åŠ åˆ°é“¾è¡¨ä¸­
     users_timer[connfd].address = client_address;
     users_timer[connfd].sockfd = connfd;
     util_timer* timer = new util_timer;
@@ -175,8 +175,8 @@ void WebServer::timer(int connfd, struct sockaddr_in client_address)
     utils.m_timer_lst.add_timer(timer);
 }
 
-//ÈôÓĞÊı¾İ´«Êä£¬Ôò½«¶¨Ê±Æ÷ÍùºóÑÓ³Ù3¸öµ¥Î»
-//²¢¶ÔĞÂµÄ¶¨Ê±Æ÷ÔÚÁ´±íÉÏµÄÎ»ÖÃ½øĞĞµ÷Õû
+//è‹¥æœ‰æ•°æ®ä¼ è¾“ï¼Œåˆ™å°†å®šæ—¶å™¨å¾€åå»¶è¿Ÿ3ä¸ªå•ä½
+//å¹¶å¯¹æ–°çš„å®šæ—¶å™¨åœ¨é“¾è¡¨ä¸Šçš„ä½ç½®è¿›è¡Œè°ƒæ•´
 void WebServer::adjust_timer(util_timer* timer)
 {
     time_t cur = time(NULL);
@@ -289,7 +289,7 @@ void WebServer::dealwithread(int sockfd)
             adjust_timer(timer);
         }
 
-        //Èô¼à²âµ½¶ÁÊÂ¼ş£¬½«¸ÃÊÂ¼ş·ÅÈëÇëÇó¶ÓÁĞ
+        //è‹¥ç›‘æµ‹åˆ°è¯»äº‹ä»¶ï¼Œå°†è¯¥äº‹ä»¶æ”¾å…¥è¯·æ±‚é˜Ÿåˆ—
         m_pool->append(users + sockfd, 0);
 
         while (true)
@@ -313,7 +313,7 @@ void WebServer::dealwithread(int sockfd)
         {
             LOG_INFO("deal with the client(%s)", inet_ntoa(users[sockfd].get_address()->sin_addr));
 
-            //Èô¼à²âµ½¶ÁÊÂ¼ş£¬½«¸ÃÊÂ¼ş·ÅÈëÇëÇó¶ÓÁĞ
+            //è‹¥ç›‘æµ‹åˆ°è¯»äº‹ä»¶ï¼Œå°†è¯¥äº‹ä»¶æ”¾å…¥è¯·æ±‚é˜Ÿåˆ—
             m_pool->append_p(users + sockfd);
 
             if (timer)
@@ -392,7 +392,7 @@ void WebServer::eventLoop()
         {
             int sockfd = events[i].data.fd;
 
-            //´¦ÀíĞÂµ½µÄ¿Í»§Á¬½Ó
+            //å¤„ç†æ–°åˆ°çš„å®¢æˆ·è¿æ¥
             if (sockfd == m_listenfd)
             {
                 bool flag = dealclinetdata();
@@ -401,18 +401,18 @@ void WebServer::eventLoop()
             }
             else if (events[i].events & (EPOLLRDHUP | EPOLLHUP | EPOLLERR))
             {
-                //·şÎñÆ÷¶Ë¹Ø±ÕÁ¬½Ó£¬ÒÆ³ı¶ÔÓ¦µÄ¶¨Ê±Æ÷
+                //æœåŠ¡å™¨ç«¯å…³é—­è¿æ¥ï¼Œç§»é™¤å¯¹åº”çš„å®šæ—¶å™¨
                 util_timer* timer = users_timer[sockfd].timer;
                 deal_timer(timer, sockfd);
             }
-            //´¦ÀíĞÅºÅ
+            //å¤„ç†ä¿¡å·
             else if ((sockfd == m_pipefd[0]) && (events[i].events & EPOLLIN))
             {
                 bool flag = dealwithsignal(timeout, stop_server);
                 if (false == flag)
                     LOG_ERROR("%s", "dealclientdata failure");
             }
-            //´¦Àí¿Í»§Á¬½ÓÉÏ½ÓÊÕµ½µÄÊı¾İ
+            //å¤„ç†å®¢æˆ·è¿æ¥ä¸Šæ¥æ”¶åˆ°çš„æ•°æ®
             else if (events[i].events & EPOLLIN)
             {
                 dealwithread(sockfd);

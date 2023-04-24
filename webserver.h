@@ -15,9 +15,9 @@
 #include "./threadpool/threadpool.h"
 #include "./http/http_conn.h"
 
-const int MAX_FD = 65536;           //×î´óÎÄ¼şÃèÊö·û
-const int MAX_EVENT_NUMBER = 10000; //×î´óÊÂ¼şÊı
-const int TIMESLOT = 5;             //×îĞ¡³¬Ê±µ¥Î»
+const int MAX_FD = 65536;           //æœ€å¤§æ–‡ä»¶æè¿°ç¬¦
+const int MAX_EVENT_NUMBER = 10000; //æœ€å¤§äº‹ä»¶æ•°
+const int TIMESLOT = 5;             //æœ€å°è¶…æ—¶å•ä½
 
 class WebServer
 {
@@ -44,7 +44,7 @@ public:
     void dealwithwrite(int sockfd);
 
 public:
-    //»ù´¡
+    //åŸºç¡€
     int m_port;
     char* m_root;
     int m_log_write;
@@ -55,18 +55,18 @@ public:
     int m_epollfd;
     http_conn* users;
 
-    //Êı¾İ¿âÏà¹Ø
+    //æ•°æ®åº“ç›¸å…³
     connection_pool* m_connPool;
-    string m_user;         //µÇÂ½Êı¾İ¿âÓÃ»§Ãû
-    string m_passWord;     //µÇÂ½Êı¾İ¿âÃÜÂë
-    string m_databaseName; //Ê¹ÓÃÊı¾İ¿âÃû
+    string m_user;         //æ•°æ®åº“ç”¨æˆ·å
+    string m_passWord;     //æ•°æ®åº“å¯†ç 
+    string m_databaseName; //ä½¿ç”¨æ•°æ®åº“å
     int m_sql_num;
 
-    //Ïß³Ì³ØÏà¹Ø
+    //çº¿ç¨‹æ± ç›¸å…³
     threadpool<http_conn>* m_pool;
     int m_thread_num;
 
-    //epoll_eventÏà¹Ø
+    //epoll_eventç›¸å…³
     epoll_event events[MAX_EVENT_NUMBER];
 
     int m_listenfd;
@@ -75,7 +75,7 @@ public:
     int m_LISTENTrigmode;
     int m_CONNTrigmode;
 
-    //¶¨Ê±Æ÷Ïà¹Ø
+    //å®šæ—¶å™¨ç›¸å…³
     client_data* users_timer;
     Utils utils;
 };
