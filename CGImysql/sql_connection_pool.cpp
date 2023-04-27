@@ -53,7 +53,7 @@ void connection_pool::init(string url, string User, string PassWord, string DBNa
 		++m_FreeConn;
 	}
 
-	reserve = sem(m_FreeConn);
+	reserve = sem(m_FreeConn);	//原子操作
 
 	m_MaxConn = m_FreeConn;
 }
